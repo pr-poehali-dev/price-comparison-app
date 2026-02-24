@@ -6,6 +6,7 @@ const DEMO_FAVORITES: Product[] = [
     id: 'fav1',
     name: 'Молоко 3.2%',
     brand: 'Простоквашино',
+    store: 'Пятёрочка',
     price: 89,
     amount: 1,
     unit: 'л',
@@ -18,6 +19,7 @@ const DEMO_FAVORITES: Product[] = [
     id: 'fav2',
     name: 'Сахар белый',
     brand: 'Свекла',
+    store: 'Магнит',
     price: 50,
     amount: 1,
     unit: 'кг',
@@ -35,8 +37,8 @@ const DEMO_HISTORY: HistoryEntry[] = [
     category: 'sugar',
     winnerId: 'h1p1',
     products: [
-      { id: 'h1p1', name: 'Сахар', brand: 'Свекла', price: 50, amount: 1, unit: 'кг', category: 'sugar', pricePerKg: 50, addedAt: new Date() },
-      { id: 'h1p2', name: 'Сахар', brand: 'Свекла Сладкая', price: 50, amount: 0.9, unit: 'кг', category: 'sugar', pricePerKg: 55.6, addedAt: new Date() },
+      { id: 'h1p1', name: 'Сахар', brand: 'Свекла', store: 'Пятёрочка', price: 50, amount: 1, unit: 'кг', category: 'sugar', pricePerKg: 50, addedAt: new Date() },
+      { id: 'h1p2', name: 'Сахар', brand: 'Свекла Сладкая', store: 'Магнит', price: 50, amount: 0.9, unit: 'кг', category: 'sugar', pricePerKg: 55.6, addedAt: new Date() },
     ],
   },
   {
@@ -45,8 +47,8 @@ const DEMO_HISTORY: HistoryEntry[] = [
     category: 'dairy',
     winnerId: 'h2p2',
     products: [
-      { id: 'h2p1', name: 'Молоко 2.5%', brand: 'Домик в деревне', price: 95, amount: 1, unit: 'л', category: 'dairy', pricePerKg: 95, addedAt: new Date() },
-      { id: 'h2p2', name: 'Молоко 2.5%', brand: 'Вкуснотеево', price: 79, amount: 0.9, unit: 'л', category: 'dairy', pricePerKg: 87.8, addedAt: new Date() },
+      { id: 'h2p1', name: 'Молоко 2.5%', brand: 'Домик в деревне', store: 'Перекрёсток', price: 95, amount: 1, unit: 'л', category: 'dairy', pricePerKg: 95, addedAt: new Date() },
+      { id: 'h2p2', name: 'Молоко 2.5%', brand: 'Вкуснотеево', store: 'Дикси', price: 79, amount: 0.9, unit: 'л', category: 'dairy', pricePerKg: 87.8, addedAt: new Date() },
     ],
   },
 ];
@@ -87,12 +89,12 @@ export function useProducts() {
   }, []);
 
   const buildProduct = useCallback((
-    name: string, brand: string, price: number, amount: number, unit: Unit, category: string
+    name: string, brand: string, price: number, amount: number, unit: Unit, category: string, store = ''
   ): Product => {
     const pricePerKg = calcPricePerUnit(price, amount, unit);
     return {
       id: Date.now().toString() + Math.random(),
-      name, brand, price, amount, unit, category,
+      name, brand, store, price, amount, unit, category,
       pricePerKg,
       isFavorite: false,
       addedAt: new Date(),

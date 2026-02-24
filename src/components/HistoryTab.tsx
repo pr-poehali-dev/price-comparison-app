@@ -84,9 +84,11 @@ export default function HistoryTab({ history }: HistoryTabProps) {
                       }
                       <div className="min-w-0">
                         <p className={`text-sm font-medium truncate ${isWinner ? 'text-white' : 'text-muted-foreground'}`}>
-                          {product.brand || product.name}
+                          {product.name}{product.store ? ` · ${product.store}` : ''}
                         </p>
-                        <p className="text-xs text-muted-foreground">{product.price}₽ / {product.amount}{product.unit}</p>
+                        <p className="text-xs text-muted-foreground">
+                          {product.brand && `${product.brand} · `}{product.price}₽ / {product.amount}{product.unit}
+                        </p>
                       </div>
                     </div>
                     <span className={`text-sm font-rubik font-bold ml-2 ${isWinner ? 'neon-green' : 'text-muted-foreground'}`}>

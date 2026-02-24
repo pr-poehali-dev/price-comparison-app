@@ -1,4 +1,4 @@
-import { Product, UNIT_LABEL } from '@/types/product';
+import { Product, UNIT_LABEL, STORES } from '@/types/product';
 import Icon from '@/components/ui/icon';
 
 interface FavoritesTabProps {
@@ -41,7 +41,14 @@ export default function FavoritesTab({ favorites, onRemove }: FavoritesTabProps)
                   <span className="text-yellow-400 text-sm">⭐</span>
                   <p className="text-white font-semibold">{product.name}</p>
                 </div>
-                <p className="text-muted-foreground text-sm mb-3">{product.brand}</p>
+                <div className="flex items-center gap-2 mb-3 flex-wrap">
+                  {product.brand && <p className="text-muted-foreground text-sm">{product.brand}</p>}
+                  {product.store && (
+                    <span className="text-xs px-2 py-0.5 rounded-full bg-secondary border border-border text-muted-foreground">
+                      {STORES.find(s => s.id === product.store)?.emoji} {product.store}
+                    </span>
+                  )}
+                </div>
 
                 <div className="flex items-center gap-4">
                   <div className="bg-secondary/60 rounded-xl px-3 py-2">

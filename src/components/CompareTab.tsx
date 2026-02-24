@@ -1,22 +1,23 @@
 import { useState } from 'react';
-import { Product, Unit, UNITS, UNIT_LABEL, CATEGORIES, calcPricePerUnit } from '@/types/product';
+import { Product, Unit, UNITS, UNIT_LABEL, CATEGORIES, STORES } from '@/types/product';
 import Icon from '@/components/ui/icon';
 
 interface CompareTabProps {
   onSave: (products: Product[], winnerId: string, category: string) => void;
   onFavorite: (product: Product) => void;
-  buildProduct: (name: string, brand: string, price: number, amount: number, unit: Unit, category: string) => Product;
+  buildProduct: (name: string, brand: string, price: number, amount: number, unit: Unit, category: string, store?: string) => Product;
 }
 
 interface ProductForm {
   name: string;
   brand: string;
+  store: string;
   price: string;
   amount: string;
   unit: Unit;
 }
 
-const emptyForm = (): ProductForm => ({ name: '', brand: '', price: '', amount: '', unit: 'кг' });
+const emptyForm = (): ProductForm => ({ name: '', brand: '', store: '', price: '', amount: '', unit: 'кг' });
 
 export default function CompareTab({ onSave, onFavorite, buildProduct }: CompareTabProps) {
   const [forms, setForms] = useState<ProductForm[]>([emptyForm(), emptyForm()]);
@@ -47,7 +48,7 @@ export default function CompareTab({ onSave, onFavorite, buildProduct }: Compare
       const price = parseFloat(f.price);
       const amount = parseFloat(f.amount);
       if (!price || !amount) return null;
-      return buildProduct(f.name || `Товар ${i + 1}`, f.brand, price, amount, f.unit, category);
+      return buildProduct(f.name || `Товар ${i + 1}`, f.brand, price, amount, f.unit, category, f.store);
     }).filter(Boolean) as Product[];
 
     if (products.length < 2) return;
@@ -142,13 +143,24 @@ export default function CompareTab({ onSave, onFavorite, buildProduct }: Compare
               onChange={e => updateForm(i, 'name', e.target.value)}
               className="w-full bg-secondary/50 border border-border rounded-xl px-3 py-2.5 text-sm text-white placeholder:text-muted-foreground focus:outline-none focus:border-primary/60 transition-colors"
             />
-            <input
-              type="text"
-              placeholder="Марка / бренд (необязательно)"
-              value={form.brand}
-              onChange={e => updateForm(i, 'brand', e.target.value)}
-              className="w-full bg-secondary/50 border border-border rounded-xl px-3 py-2.5 text-sm text-white placeholder:text-muted-foreground focus:outline-none focus:border-primary/60 transition-colors"
-            />
+            <div className="flex gap-2">
+              <input
+                type="text"
+                placeholder="Марка / бренд (необязательно)"
+                value={form.brand}
+                onChange={e => updateForm(i, 'brand', e.target.value)}
+                className="flex-1 bg-secondary/50 border border-border rounded-xl px-3 py-2.5 text-sm text-white placeholder:text-muted-foreground focus:outline-none focus:border-primary/60 transition-colors"
+              />
+              <select
+                value={form.store}
+                onChange={e => updateForm(i, 'store', e.target.value)}
+                className={`bg-secondary/50 border border-border rounded-xl px-3 py-2.5 text-sm focus:outline-none focus:border-primary/60 transition-colors cursor-pointer ${form.store ? 'text-white' : 'text-muted-foreground'}`}
+              >
+                {STORES.map(s => (
+                  <option key={s.id} value={s.id}>{s.id === '' ? '🏪 Магазин' : `${s.emoji} ${s.label}`}</option>
+                ))}
+              </select>
+            </div>
             <div className="flex gap-2">
               <div className="relative flex-1">
                 <input
@@ -236,7 +248,14 @@ export default function CompareTab({ onSave, onFavorite, buildProduct }: Compare
                         )}
                       </div>
                       <p className="text-white font-semibold">{product.name}</p>
-                      <p className="text-muted-foreground text-sm">{product.brand}</p>
+                      <div className="flex items-center gap-2 flex-wrap">
+                        {product.brand && <p className="text-muted-foreground text-sm">{product.brand}</p>}
+                        {product.store && (
+                          <span className="text-xs px-2 py-0.5 rounded-full bg-secondary border border-border text-muted-foreground">
+                            {STORES.find(s => s.id === product.store)?.emoji} {product.store}
+                          </span>
+                        )}
+                      </div>
                     </div>
                     <button
                       onClick={() => handleFavorite(product)}

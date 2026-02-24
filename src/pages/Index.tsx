@@ -5,7 +5,7 @@ import HistoryTab from '@/components/HistoryTab';
 import FavoritesTab from '@/components/FavoritesTab';
 import ProfileTab from '@/components/ProfileTab';
 import { useProducts } from '@/hooks/useProducts';
-import { Product, Unit } from '@/types/product';
+import { Unit } from '@/types/product';
 
 type Tab = 'compare' | 'history' | 'favorites' | 'profile';
 
@@ -26,8 +26,8 @@ export default function Index() {
   const [activeTab, setActiveTab] = useState<Tab>('compare');
   const { favorites, history, totalSaved, addToFavorites, removeFromFavorites, saveComparison, buildProduct } = useProducts();
 
-  const handleBuildProduct = (name: string, brand: string, price: number, amount: number, unit: Unit, category: string): Product => {
-    return buildProduct(name, brand, price, amount, unit, category);
+  const handleBuildProduct = (name: string, brand: string, price: number, amount: number, unit: Unit, category: string, store = '') => {
+    return buildProduct(name, brand, price, amount, unit, category, store);
   };
 
   return (

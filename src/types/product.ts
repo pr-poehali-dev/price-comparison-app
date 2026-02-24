@@ -4,6 +4,7 @@ export interface Product {
   id: string;
   name: string;
   brand: string;
+  store: string;
   price: number;
   amount: number;
   unit: Unit;
@@ -12,6 +13,18 @@ export interface Product {
   isFavorite?: boolean;
   addedAt: Date;
 }
+
+export const STORES = [
+  { id: '', label: 'Магазин', emoji: '🏪' },
+  { id: 'Пятёрочка', label: 'Пятёрочка', emoji: '5️⃣' },
+  { id: 'Магнит', label: 'Магнит', emoji: '🧲' },
+  { id: 'Дикси', label: 'Дикси', emoji: '🔵' },
+  { id: 'Перекрёсток', label: 'Перекрёсток', emoji: '✖️' },
+  { id: 'ВкусВилл', label: 'ВкусВилл', emoji: '🌿' },
+  { id: 'Лента', label: 'Лента', emoji: '🎀' },
+  { id: 'Ашан', label: 'Ашан', emoji: '🛒' },
+  { id: 'Другой', label: 'Другой', emoji: '📍' },
+];
 
 export interface ComparisonResult {
   products: Product[];
