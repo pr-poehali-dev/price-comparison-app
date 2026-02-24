@@ -43,11 +43,11 @@ export default function CompareTab({ onSave, onFavorite, buildProduct }: Compare
   };
 
   const compare = () => {
-    const products = forms.map(f => {
+    const products = forms.map((f, i) => {
       const price = parseFloat(f.price);
       const amount = parseFloat(f.amount);
-      if (!f.name || !price || !amount) return null;
-      return buildProduct(f.name, f.brand, price, amount, f.unit, category);
+      if (!price || !amount) return null;
+      return buildProduct(f.name || `Товар ${i + 1}`, f.brand, price, amount, f.unit, category);
     }).filter(Boolean) as Product[];
 
     if (products.length < 2) return;
@@ -68,7 +68,7 @@ export default function CompareTab({ onSave, onFavorite, buildProduct }: Compare
     onFavorite(product);
   };
 
-  const isFormValid = forms.filter(f => f.name && f.price && f.amount).length >= 2;
+  const isFormValid = forms.filter(f => f.price && f.amount).length >= 2;
   const maxPPU = result ? Math.max(...result.map(p => p.pricePerKg || 0)) : 0;
 
   return (
@@ -137,14 +137,14 @@ export default function CompareTab({ onSave, onFavorite, buildProduct }: Compare
           <div className="flex flex-col gap-2.5">
             <input
               type="text"
-              placeholder="Название (Сахар, Молоко...)"
+              placeholder="Название (необязательно)"
               value={form.name}
               onChange={e => updateForm(i, 'name', e.target.value)}
               className="w-full bg-secondary/50 border border-border rounded-xl px-3 py-2.5 text-sm text-white placeholder:text-muted-foreground focus:outline-none focus:border-primary/60 transition-colors"
             />
             <input
               type="text"
-              placeholder="Марка / бренд"
+              placeholder="Марка / бренд (необязательно)"
               value={form.brand}
               onChange={e => updateForm(i, 'brand', e.target.value)}
               className="w-full bg-secondary/50 border border-border rounded-xl px-3 py-2.5 text-sm text-white placeholder:text-muted-foreground focus:outline-none focus:border-primary/60 transition-colors"
